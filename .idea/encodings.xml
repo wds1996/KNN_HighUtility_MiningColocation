@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java/BaseClass/Instance.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/BaseClass/TreeNode.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/BaseDM/BasedDM.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/BaseDM/BasedLine.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/BaseDM/CandidatePattern.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/RandomData/Addutility.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/RandomData/CreateDate.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/RandomData/Create_RandomDate.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/RandomData/ReadFile.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/RandomData/ReadFile2.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/RandomData/ReadFile3.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/utils/Get_kNI.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/utils/Grid_kNI.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/utils/Load_DataSet.java" charset="GBK" />
+  </component>
+</project>
