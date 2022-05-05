@@ -4,9 +4,9 @@ import BaseClass.TreeNode;
 
 import java.util.*;
 
-public class CandidatePattern {
+public class CandidataPattern {
 	
-	public Map<String, List<String>> candidatePattern(Map<String, List<String>> kNF, int k) {
+	public Map<String, List<String>> candidataPattern(Map<String, List<String>> kNF, int k) {
 		//1，将kNF由核元素组成一个树结构
 		//2，进行候选模式的收集
 		Map<String, List<String>> patternMap = new HashMap<>();
@@ -15,17 +15,18 @@ public class CandidatePattern {
 			List<String> list = new ArrayList<String>(); //存放核候选模式
 			
 			TreeNode root = new TreeNode(c);
-			for (int i = 0; i < kNF.get(c).size(); i++) {
+			int len = kNF.get(c).size();
+			for (int i = 0; i < len; i++) {
 				TreeNode node = new TreeNode(kNF.get(c).get(i));
 				root.add(node);
 				//从第二层开始递归把node的后面的特征都存进去
 				addNode(node, kNF.get(c));
-				
 			}
 			//遍历
-			if (kNF.get(c).size() < k) {
-				k = kNF.get(c).size();
+			if (len < k) {
+				k = len;
 			}
+			//层次遍历
 			traverse(root,list,k);
 			list.remove(0);
 			patternMap.put(c, list);
@@ -58,9 +59,7 @@ public class CandidatePattern {
 			}else {
 				list.add(node.getFeature());
 				if (!node.getChild().isEmpty()) {
-					for (int i = 0; i < node.getChild().size(); i++) {
-						queue.add(node.getChild().get(i));
-					}
+					queue.addAll(node.getChild());
 				}
 			}
 		}

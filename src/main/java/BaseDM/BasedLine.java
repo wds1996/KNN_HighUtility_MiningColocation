@@ -12,8 +12,8 @@ public class BasedLine {
 	 * @param k_NI
 	 */
 	
-	static Map<String, List<String>> highUtilityPattern = new HashMap<>(); //存储高效用的核模式;
-	public void get_HighUtilityPattern(double threshold, int k, Map<Instance, List<Instance>> k_NI) {
+	private static Map<String, List<String>> highUtilityPattern = new HashMap<>(); //存储高效用的核模式;
+	public Map<String, List<String>> get_HighUtilityPattern(double threshold, int k, Map<Instance, List<Instance>> k_NI) {
 		/*
 		 * 1、得到核元素的k-NF
 		 * 2、根据k-NF生成2——k+1阶的模式
@@ -26,16 +26,18 @@ public class BasedLine {
 		for (Instance instance : k_NI.keySet()) {
 			Map<Instance, Set<String>> instance_kNF = new HashMap<>(); //实例的k阶邻近特征集
 			Set<String> featureSet = new TreeSet<>();
-			for(int i = 0; i < k_NI.get(instance).size(); i++) {
+			int len = k_NI.get(instance).size();
+			for(int i = 0; i < len; i++) {
 				String temp = k_NI.get(instance).get(i).getFeature();
 				featureSet.add(temp);
-				instance_kNF.put(instance, featureSet);
+//				instance_kNF.put(instance, featureSet);
 			}
-			
+			//这里改动了
+			instance_kNF.put(instance, featureSet);
+			//到这里
 			String feature = instance.getFeature();
 			if (!k_NFMap.containsKey(feature)) {
-				Set<String> set = new TreeSet<>();
-				set.addAll(featureSet);
+				Set<String> set = new TreeSet<>(featureSet);
 				k_NFMap.put(feature, set);
 				
 			}else {
@@ -44,8 +46,7 @@ public class BasedLine {
 		}
 		Map<String, List<String>> k_NF = new HashMap<>();
 		for (String c : k_NFMap.keySet()) {
-			List<String> list = new ArrayList<>();
-			list.addAll(k_NFMap.get(c));
+			List<String> list = new ArrayList<>(k_NFMap.get(c));
 			k_NF.put(c,list);
 		}
 		k_NFMap.clear();
@@ -57,45 +58,41 @@ public class BasedLine {
 		}*/
 		
 		//顺序树收集模式
-		CandidatePattern cPattern = new CandidatePattern();
-		Map<String, List<String>> candidatePattern= new HashMap<>();
-		candidatePattern = cPattern.candidatePattern(k_NF,k);
+		CandidataPattern cPattern = new CandidataPattern();
+		Map<String, List<String>> candidataPattern= new HashMap<>();
+		candidataPattern = cPattern.candidataPattern(k_NF,k);
 		 
 		for (String c : k_NF.keySet()) { //组成核模式
-			System.out.println("核元素" + c + "的候选模式的个数:" + candidatePattern.get(c).size());
+			System.out.println("核元素" + c + "的候选模式的个数:" + candidataPattern.get(c).size());
 			
-			Map<Instance, List<Instance>> instanceMap = new HashMap<>(); //暂存该核模式的核实例
+			Map<Instance, List<Instance>> instanceMap = new HashMap<>(); //暂存该核模式的参与实例集
 			for (Instance instance : k_NI.keySet()) {
 				if (instance.getFeature().equals(c)) {
 					instanceMap.put(instance, k_NI.get(instance));
 					//System.out.println(instanceMap);
 				}
 			}
-			
-			isUtilityPattern(threshold, c, candidatePattern.get(c), instanceMap);
-			
+			//判断是否高效
+			isUtilityPattern(threshold, c, candidataPattern.get(c), instanceMap);
 		}
-		//打印高效用的模式
-		for (String c : highUtilityPattern.keySet()) {
-			System.out.println("核模式" + c + "的高效用模式个数：" + highUtilityPattern.get(c).size());
-			System.out.println("分别为：" + highUtilityPattern.get(c));
-		}
+		return highUtilityPattern;
+
 	}
 	
 	//得到2-k+1阶模式的效用度
-	public static void isUtilityPattern(double threshold, String c, List<String> candidatePattern, Map<Instance, List<Instance>> instanceMap) {
+	public static void isUtilityPattern(double threshold, String c, List<String> candidataPattern, Map<Instance, List<Instance>> instanceMap) {
 		Map<String, Double> featureUtilityMap = Load_DataSet.featureUtilityMap;
-		
-		int n = candidatePattern.size();//获取当前核模式的个数
+
+		int n = candidataPattern.size();//获取当前核模式的个数
 		for(int i = 0; i < n; i++) { //从每个模式开始判断
-			String pattern = candidatePattern.get(i);//得到一个模式
+			String pattern = candidataPattern.get(i);//得到一个模式
 			Set<Instance>  tableInstance = new HashSet<>();//存放该模式的核表实例
 			//获取二阶的核表实例
 			if (pattern.length() == 1) {
 				for (Instance instance : instanceMap.keySet()) {
 					//拿到k-NI中每个实例
 					for(int j = 0; j < instanceMap.get(instance).size(); j++) {
-						if (instanceMap.get(instance).get(j).getFeature().equals(pattern )) {
+						if (instanceMap.get(instance).get(j).getFeature().equals(pattern)) {
 							//该实例属于此模式的核表实例
 							tableInstance.add(instanceMap.get(instance).get(j));
 						}
@@ -177,7 +174,7 @@ public class BasedLine {
 				
 			}
 		}
-		
+
 	}
 	
 }

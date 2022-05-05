@@ -39,12 +39,17 @@ public class BasedDM {
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
-			
+
 		//清空instanceList,减少内存
 		Load_DataSet.instanceList.clear();
 		System.out.println("完成:" + k_NI.size());
 		BasedLine b = new BasedLine();
-		b.get_HighUtilityPattern(threshold, k, k_NI);
+		Map<String, List<String>> highUtilityPattern = b.get_HighUtilityPattern(threshold, k, k_NI);
+		//打印高效用的模式
+		for (String c : highUtilityPattern.keySet()) {
+			System.out.println("核模式" + c + "的高效用模式个数：" + highUtilityPattern.get(c).size());
+			System.out.println("分别为：" + highUtilityPattern.get(c));
+		}
 		long endTime = System.currentTimeMillis();
 		System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 	}
