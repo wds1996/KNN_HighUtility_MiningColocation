@@ -1,6 +1,7 @@
 package BaseDM;
 
 import BaseClass.Instance;
+import OptimizedDM.Pruning;
 import utils.Load_DataSet;
 
 import java.util.*;
@@ -108,14 +109,15 @@ public class BasedLine {
 						fString = fString + instanceMap.get(instance).get(j).getFeature();
 					}
 					
-					for(int k = 0; k < pattern.length(); k++) {
-						String string = pattern.charAt(k) + "";
-						if (fString.contains(string)) {
-							temp++;
-						}
-					}
+//					for(int k = 0; k < pattern.length(); k++) {
+//						String string = pattern.charAt(k) + "";
+//						if (fString.contains(string)) {
+//							temp++;
+//						}
+//					}
 					//匹配上时
-					if (temp == pattern.length()) {
+//					if (temp == pattern.length()) {
+					if (fString.contains(pattern)){
 						for(int j = 0; j < instanceMap.get(instance).size(); j++) {
 							if (pattern.contains(instanceMap.get(instance).get(j).getFeature())) {
 								//一样对该模式判断是否有此特征
@@ -149,21 +151,7 @@ public class BasedLine {
 					}
 				}else {
 					//二阶以上求feature的平均
-					double featureNumUi = 0; //模式中每个特征的效用度之和
-					for(int j = 0; j < pattern.length(); j++) {
-						double utility = 0;
-						double featureUtility = 0; //一个特征的效用度
-						String feature = pattern.charAt(j) + "";
-						
-						for (Instance instance : tableInstance) {
-							if (instance.getFeature().equals(feature)) {
-								utility += instance.getU();
-							}
-						}
-						featureUtility = utility / featureUtilityMap.get(feature);
-						featureNumUi += featureUtility;
-					}
-					patternUI = featureNumUi / pattern.length();
+					patternUI = getPatternUI(featureUtilityMap, pattern, tableInstance);
 					//大于阈值的模式
 					if (patternUI >= threshold) {
 						System.out.println(pattern+":"+patternUI);
@@ -176,5 +164,25 @@ public class BasedLine {
 		}
 
 	}
-	
+
+	public static double getPatternUI(Map<String, Double> featureUtilityMap, String pattern, Set<Instance> tableInstance) {
+		double patternUI;
+		double featureNumUi = 0; //模式中每个特征的效用度之和
+		for(int j = 0; j < pattern.length(); j++) {
+			double utility = 0;
+			double featureUtility = 0; //一个特征的效用度
+			String feature = pattern.charAt(j) + "";
+
+			for (Instance instance : tableInstance) {
+				if (instance.getFeature().equals(feature)) {
+					utility += instance.getU();
+				}
+			}
+			featureUtility = utility / featureUtilityMap.get(feature);
+			featureNumUi += featureUtility;
+		}
+		patternUI = featureNumUi / pattern.length();
+		return patternUI;
+	}
+
 }

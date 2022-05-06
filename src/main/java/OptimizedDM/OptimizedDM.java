@@ -16,14 +16,12 @@ public class OptimizedDM {
 	private static final String[] cF = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P"}; // 指定核元素集
 	//,"B","C","D","E","F","G","H","I","J","K","L"
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		long startTime = System.currentTimeMillis();
 		
 		Load_DataSet iDate = new Load_DataSet();
 		try {
 			iDate.readInstance("Data/beijingPOI-U.txt");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -33,7 +31,6 @@ public class OptimizedDM {
 		try {
 			k_NI = get_kni.get_kNI(k, cF, Load_DataSet.instanceList);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	
@@ -43,7 +40,6 @@ public class OptimizedDM {
 //		try {
 //			k_NI = gk.grid_kNI(k, cF, Import_SpaceDate2.instanceList);
 //		} catch (Exception e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 			

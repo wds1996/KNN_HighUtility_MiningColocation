@@ -1,8 +1,8 @@
 package OptimizedDM;
 
 import BaseClass.Instance;
+import BaseDM.BasedLine;
 import utils.Load_DataSet;
-
 import java.util.*;
 
 public class Pruning {
@@ -17,7 +17,10 @@ public class Pruning {
 
 	public void get_HighUtilityPattern(double threshold, int k, Map<Instance, List<Instance>> k_NI) {
 		/*
-		 * 1、得到核元素的k-NF 2、根据k-NF生成2——k+1阶的模式 2、1对于每个生成的模式判断其效用阈值是否大于threshold 2、2 k+1
+		 * 1、得到核元素的k-NF
+		 * 2、根据k-NF生成2——k+1阶的模式
+		 * 	 2、1对于每个生成的模式判断其效用阈值是否大于threshold
+		 * 	 2、2 k+1
 		 * 3、生成高效用的模式
 		 */
 		Map<String, Set<String>> k_NFMap = new HashMap<>(); // 特征的k阶邻近特征集，以此得到候选模式，用完释放
@@ -247,22 +250,14 @@ public class Pruning {
 			patternUI = utility / featureUtilityMap.get(pattern);
 		} else {
 			// 二阶以上求feature的平均
-			double featureNumUi = 0; // 模式中每个特征的效用度之和
-			for (int j = 0; j < pattern.length(); j++) {
-				double utility = 0;
-				double featureUtility = 0; // 一个特征的效用度
-				String feature = pattern.charAt(j) + "";
-	
-				for (Instance instance : set) {
-					if (instance.getFeature().equals(feature)) {
-						utility += instance.getU();
-					}
-				}
-				featureUtility = utility / featureUtilityMap.get(feature);
-				featureNumUi += featureUtility;
-			}
-			patternUI = featureNumUi / pattern.length();
+			patternUI = getPatternUI(set, pattern, featureUtilityMap);
 		}
+		return patternUI;
+	}
+
+	public static double getPatternUI(Set<Instance> set, String pattern, Map<String, Double> featureUtilityMap) {
+		double patternUI;
+		double patternUI = BasedLine.getPatternUI(featureUtilityMap, pattern, set);
 		return patternUI;
 	}
 
